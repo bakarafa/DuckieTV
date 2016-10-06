@@ -203,7 +203,7 @@ if (localStorage.getItem('optin_error_reporting')) {
  * if the String contains a base32 infoHash then extract it, convert it to base16 and return that.
  */
 String.prototype.getInfoHash = function () {
-    var infoHash16 = this.match(/([0-9ABCDEFabcdef]{40})/);  // extract base16 infoHash
+    var infoHash16 = this.match(/([0-9A-Fa-f]{40})/);  // extract base16 infoHash
     if (infoHash16 && infoHash16.length) {
         return infoHash16[0].toUpperCase();
     } else {
@@ -211,7 +211,7 @@ String.prototype.getInfoHash = function () {
         if (infoHash32 && infoHash32.length) {
             return ("0".repeat(40) + basex16.encode(basex32.decode(infoHash32[0]))).slice(-40); // convert to base16 infohash (may need padding with zeroes to length 40)
         } else {
-            return null; // infohash not found in String.
+            return null; // infoHash not found in String.
         }
     }
 };
@@ -230,7 +230,7 @@ String.prototype.replaceInfoHash = function () {
         if (infoHash32 && infoHash32.length) {
             return this.replace(infoHash32[0], ("0".repeat(40) + basex16.encode(basex32.decode(infoHash32[0]))).slice(-40)); // convert base32 to base16 infohash (may need padding with zeroes to length 40) and replace it in String
         } else {
-            return this.toString(); // infohash not found in String
+            return this.toString(); // infoHash not found in String
         }
     }
 };

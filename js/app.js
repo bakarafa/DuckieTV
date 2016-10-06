@@ -46,13 +46,13 @@ var DuckieTV = angular.module('DuckieTV', [
  * which ensures that standalone gets some pre-processing done before actioning
  * the window.location.reload()  fixes #569
  */
-.service('DuckietvReload', function() {
+.service('DuckietvReload', ["$rootScope", function($rootScope) {
     var service = {
         windowLocationReload: function() {
             if ((navigator.userAgent.toLowerCase().indexOf('standalone') !== -1)) {
                 // reload for standalones
                 //console.debug('DuckietvReload for standalone');
-                require('nw.gui').Window.get().emit('locationreload');
+                $rootScope.$emit('locationreload');
             } else {
                 // reload for non-standalone
                 //console.debug('DuckietvReload for non-standalone');
@@ -61,7 +61,7 @@ var DuckieTV = angular.module('DuckieTV', [
         }
     };
     return service;
-})
+}])
 
 /**
  * BackupService is injected whenever a backup is requested
@@ -130,7 +130,6 @@ var DuckieTV = angular.module('DuckieTV', [
                         'dlPath': serie.get('dlPath')
                     })
                 }
-
                 // Store watched episodes for each serie
                 return CRUD.executeQuery('select Series.TVDB_ID, Episodes.TVDB_ID as epTVDB_ID, Episodes.watchedAt, Episodes.downloaded from Series left join Episodes on Episodes.ID_Serie = Series.ID_Serie where Episodes.downloaded == 1 or  Episodes.watchedAt is not null').then(function(res) {
                     while (row = res.next()) {

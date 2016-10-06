@@ -163,15 +163,9 @@ DuckieTV.controller('SettingsTorrentCtrl', ["$scope", "$rootScope", "$injector",
         };
 
         $scope.toggleAutoDownload = function() {
-            if ($scope.adEnabled == true) {
-                SettingsService.set('torrenting.autodownload', false);
-                $scope.adEnabled = false;
-                AutoDownloadService.detach();
-            } else {
-                SettingsService.set('torrenting.autodownload', true);
-                $scope.adEnabled = true;
-                AutoDownloadService.attach();
-            }
+            $scope.adEnabled = !$scope.adEnabled;
+            SettingsService.set('torrenting.autodownload', $scope.adEnabled);
+            $injector.get('DuckietvReload').windowLocationReload();
         };
 
         $scope.toggleChromium = function() {
